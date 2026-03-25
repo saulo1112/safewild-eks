@@ -1,0 +1,43 @@
+apiVersion: eksctl.io/v1alpha5
+kind: ClusterConfig
+
+metadata:
+  name: microservice-finaldelivery
+  region: us-east-1
+  version: "1.34"
+
+iam:
+  withOIDC: true
+  serviceRoleARN: arn:aws:iam::103242399426:role/EksClusterRole
+
+vpc:
+  nat:
+    gateway: Single
+
+managedNodeGroups:
+  - name: ai-nodes
+    instanceType: t3.large
+    desiredCapacity: 3
+    minSize: 3
+    maxSize: 4
+    volumeSize: 30
+    privateNetworking: true
+    amiFamily: AmazonLinux2023
+    iam:
+      instanceRoleARN: arn:aws:iam::103242399426:role/EksNodeRole
+    labels:
+      workload: general
+      nodegroup: ai-nodes
+    tags:
+      Project: AI-Cluster
+      Environment: Personal
+      k8s.io/cluster-autoscaler/enabled: "true"
+      k8s.io/cluster-autoscaler/microservice-finaldelivery: "owned"
+
+addons:
+  - name: vpc-cni
+    version: latest
+  - name: coredns
+    version: latest
+  - name: kube-proxy
+    version: latest

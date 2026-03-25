@@ -19,8 +19,8 @@ spec:
     spec:
       containers:
         - name: ai-service
-          # Replace <ACCOUNT_ID> and <REGION> with your values
-          image: <ACCOUNT_ID>.dkr.ecr.<REGION>.amazonaws.com/ai-service:latest
+          # Replace 103242399426 and us-east-1 with your values
+          image: 103242399426.dkr.ecr.us-east-1.amazonaws.com/ai-service:v1
           imagePullPolicy: Always
           ports:
             - containerPort: 5001
