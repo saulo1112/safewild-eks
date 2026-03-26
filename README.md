@@ -51,40 +51,40 @@ Implementar una arquitectura de microservicios para una aplicación de IA en Ama
 
 ```
                         ┌─────────────────────────────────────────────┐
-                        │              AWS Cloud (us-east-1)           │
-                        │                                              │
+                        │              AWS Cloud (us-east-1)          │
+                        │                                             │
         Internet        │   ┌──────────────────────────────────────┐  │
    ─────────────────►   │   │         Amazon EKS Cluster           │  │
         HTTP :80        │   │         (3 nodos t3.large)           │  │
                         │   │                                      │  │
-                        │   │  ┌─────────────────────────────┐    │  │
-                        │   │  │  AWS LoadBalancer (ELB)     │    │  │
-                        │   │  │  frontend-svc  :80          │    │  │
-                        │   │  └──────────┬──────────────────┘    │  │
+                        │   │  ┌─────────────────────────────┐     │  │
+                        │   │  │  AWS LoadBalancer (ELB)     │     │  │
+                        │   │  │  frontend-svc  :80          │     │  │
+                        │   │  └──────────┬──────────────────┘     │  │
                         │   │             │                        │  │
-                        │   │   ┌─────────▼──────────┐            │  │
+                        │   │   ┌─────────▼──────────┐             │  │
                         │   │   │  frontend (x2 pods) │            │  │
                         │   │   │  Flask + HTML/JS    │            │  │
                         │   │   │  :5000              │            │  │
                         │   │   └────┬──────────┬─────┘            │  │
-                        │   │        │          │                   │  │
-                        │   │  ┌─────▼──┐  ┌───▼──────────┐       │  │
-                        │   │  │ai-svc  │  │ data-svc     │       │  │
-                        │   │  │(x2 pod)│  │ (x2 pods)    │       │  │
-                        │   │  │MobileN │  │ psycopg2     │       │  │
-                        │   │  │V2 :5001│  │ :5002        │       │  │
-                        │   │  └────────┘  └──────┬───────┘       │  │
-                        │   │                     │               │  │
-                        │   │             ┌───────▼──────┐        │  │
-                        │   │             │  PostgreSQL  │        │  │
-                        │   │             │  (1 pod)     │        │  │
-                        │   │             │  PVC 5Gi gp2 │        │  │
-                        │   │             │  :5432       │        │  │
-                        │   │             └──────────────┘        │  │
+                        │   │        │          │                  │  │
+                        │   │  ┌─────▼──┐  ┌───▼──────────┐        │  │
+                        │   │  │ai-svc  │  │ data-svc     │        │  │
+                        │   │  │(x2 pod)│  │ (x2 pods)    │        │  │
+                        │   │  │MobileN │  │ psycopg2     │        │  │
+                        │   │  │V2 :5001│  │ :5002        │        │  │
+                        │   │  └────────┘  └──────┬───────┘        │  │
+                        │   │                     │                │  │
+                        │   │             ┌───────▼──────┐         │  │
+                        │   │             │  PostgreSQL  │         │  │
+                        │   │             │  (1 pod)     │         │  │
+                        │   │             │  PVC 5Gi gp2 │         │  │
+                        │   │             │  :5432       │         │  │
+                        │   │             └──────────────┘         │  │
                         │   └──────────────────────────────────────┘  │
-                        │                                              │
+                        │                                             │
                         │   Amazon ECR  ──►  3 repositorios de        │
-                        │                    imágenes Docker           │
+                        │                    imágenes Docker          │
                         └─────────────────────────────────────────────┘
 ```
 
@@ -358,11 +358,11 @@ Antes del despliegue en EKS, es posible probar la aplicación localmente:
 docker-compose up --build
 ```
 
-Accede a `http://localhost:5000` en tu navegador.
+Esto es posible accediendo a `http://localhost:5000` en un navegador.
 
 ---
 
-## 15. Limpieza de Recursos (evitar costos)
+## 15. Limpieza de Recursos (evitar costos no deseados)
 
 ```bash
 # Eliminar todos los recursos de Kubernetes
@@ -380,7 +380,7 @@ for SERVICE in frontend ai-service data-service; do
 done
 ```
 
-> **Nota:** El NAT Gateway y el Load Balancer generan costos por hora incluso sin tráfico. Eliminar el clúster cuando no esté en uso.
+> **Nota:** El NAT Gateway y el Load Balancer generan costos por hora incluso sin tráfico. Se recomienda eliminar el clúster cuando no esté en uso.
 
 ---
 
