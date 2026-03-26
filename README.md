@@ -6,27 +6,30 @@
 - Adrian Felipe Vargas Rojas (22505561)
 
 **Curso:** Computación en la Nube
+
 **Docente:** Jhorman A. Villanueva Vivas
+
 **Institución:** Universidad Autónoma de Occidente
+
 **Periodo:** 2026-1S
 
 ---
 
 ## 1. Resumen del Proyecto
 
-SafeWild es una aplicación de identificación de fauna peligrosa desplegada como arquitectura de microservicios en **Amazon EKS**. El sistema permite al usuario cargar una imagen, clasificarla usando un modelo de visión por computadora (**MobileNetV2 / ImageNet**), y determinar si el animal detectado representa un riesgo de peligro, toxicidad o agresividad, consultando una base de datos de especies. Los resultados se persisten en PostgreSQL y se visualizan en un dashboard interactivo con historial y estadísticas.
+SafeWild es una aplicación de identificación de fauna peligrosa desplegada como arquitectura de microservicios en Amazon EKS. El sistema permite al usuario cargar una imagen, clasificarla usando un modelo de visión por computadora (MobileNetV2 / ImageNet), y determinar si el animal detectado representa un riesgo de peligro, toxicidad o agresividad, consultando una base de datos de especies. Los resultados se persisten en PostgreSQL y se visualizan en un dashboard interactivo con historial y estadísticas.
 
 ---
 
 ## 2. Objetivo de la Práctica
 
-Implementar una arquitectura de microservicios para una aplicación de IA en **Amazon EKS**, cumpliendo los siguientes requisitos:
+Implementar una arquitectura de microservicios para una aplicación de IA en Amazon EKS, cumpliendo los siguientes requisitos:
 
 - Mínimo 3 microservicios: frontend, servicio de IA y servicio de datos.
-- Imágenes Docker almacenadas en **Amazon ECR**.
+- Imágenes Docker almacenadas en Amazon ECR.
 - Clúster Kubernetes con mínimo 3 nodos (instancias `t3.large`).
 - Deployment y Service configurados por microservicio.
-- Acceso al frontend a través de un **Load Balancer**.
+- Acceso al frontend a través de un Load Balancer.
 - Mínimo 2 réplicas por pod donde sea necesario.
 - Aplicación accesible desde internet.
 
@@ -96,10 +99,10 @@ Implementar una arquitectura de microservicios para una aplicación de IA en **A
 
 ### 4.2 Flujo de la Aplicación
 
-1. El usuario accede al DNS del **LoadBalancer** (puerto 80).
+1. El usuario accede al DNS del LoadBalancer (puerto 80).
 2. El tráfico llega al `frontend`, que sirve la UI.
 3. Al cargar una imagen, el `frontend` la envía en base64 al `ai-service`.
-4. El `ai-service` ejecuta **MobileNetV2** y cruza el resultado con `danger_db.json` para determinar nivel de peligro.
+4. El `ai-service` ejecuta MobileNetV2 y cruza el resultado con `danger_db.json` para determinar nivel de peligro.
 5. El `frontend` envía el resultado al `data-service`, que lo persiste en **PostgreSQL**.
 6. El historial y las estadísticas son recuperados del `data-service` bajo demanda.
 
@@ -143,7 +146,7 @@ safewild-eks/
 
 ## 6. Modelo de IA
 
-El servicio de inteligencia artificial utiliza **MobileNetV2** preentrenado en ImageNet a través de TensorFlow/Keras.
+El servicio de inteligencia artificial utiliza MobileNetV2 preentrenado en ImageNet a través de TensorFlow/Keras.
 
 - **Entrada:** imagen en base64 (redimensionada a 224×224 px).
 - **Salida:** Top-5 predicciones con confianza + enriquecimiento con `danger_db.json`.
@@ -228,7 +231,7 @@ for SERVICE in frontend ai-service data-service; do
 done
 ```
 
-> ⚠️ El build de `ai-service` descarga los pesos de MobileNetV2 (~14 MB) y puede tardar varios minutos.
+> El build de `ai-service` descarga los pesos de MobileNetV2 (~14 MB) y puede tardar varios minutos.
 
 ### Paso 4 — Crear el clúster EKS
 
@@ -236,7 +239,7 @@ done
 eksctl create cluster -f cluster/cluster.yml
 ```
 
-> ⏳ Este proceso tarda aproximadamente 15 minutos.
+> Este proceso tarda aproximadamente 15 minutos.
 
 Verificar que los nodos estén listos:
 
@@ -280,7 +283,7 @@ NAME       TYPE           CLUSTER-IP    EXTERNAL-IP                          POR
 frontend   LoadBalancer   10.100.x.x    abc123.us-east-1.elb.amazonaws.com   80:xxxxx/TCP
 ```
 
-Abre `http://<EXTERNAL-IP>` en tu navegador. ✅
+Abre `http://<EXTERNAL-IP>` en tu navegador. 
 
 ---
 
@@ -336,7 +339,7 @@ curl http://<EXTERNAL-IP>/api/stats
 
 ## 13. Configuración de Security Groups (Kubernetes)
 
-La comunicación entre microservicios se realiza exclusivamente por **ClusterIP** (red interna del clúster). Solo el `frontend` tiene un `Service` de tipo `LoadBalancer` expuesto a internet.
+La comunicación entre microservicios se realiza exclusivamente por ClusterIP (red interna del clúster). Solo el `frontend` tiene un `Service` de tipo `LoadBalancer` expuesto a internet.
 
 | Comunicación | Protocolo | Puerto |
 |---|---|---|
@@ -377,7 +380,7 @@ for SERVICE in frontend ai-service data-service; do
 done
 ```
 
-> 💡 **Nota:** El NAT Gateway y el Load Balancer generan costos por hora incluso sin tráfico. Eliminar el clúster cuando no esté en uso.
+> **Nota:** El NAT Gateway y el Load Balancer generan costos por hora incluso sin tráfico. Eliminar el clúster cuando no esté en uso.
 
 ---
 
