@@ -62,13 +62,13 @@ Implementar una arquitectura de microservicios para una aplicación de IA en Ama
                         │   │  │  frontend-svc  :80          │     │  │
                         │   │  └──────────┬──────────────────┘     │  │
                         │   │             │                        │  │
-                        │   │   ┌─────────▼──────────┐             │  │
+                        │   │   ┌─────────▼───────────┐            │  │
                         │   │   │  frontend (x2 pods) │            │  │
                         │   │   │  Flask + HTML/JS    │            │  │
                         │   │   │  :5000              │            │  │
                         │   │   └────┬──────────┬─────┘            │  │
                         │   │        │          │                  │  │
-                        │   │  ┌─────▼──┐  ┌───▼──────────┐        │  │
+                        │   │  ┌─────▼──┐  ┌────▼─────────┐        │  │
                         │   │  │ai-svc  │  │ data-svc     │        │  │
                         │   │  │(x2 pod)│  │ (x2 pods)    │        │  │
                         │   │  │MobileN │  │ psycopg2     │        │  │
@@ -103,7 +103,7 @@ Implementar una arquitectura de microservicios para una aplicación de IA en Ama
 2. El tráfico llega al `frontend`, que sirve la UI.
 3. Al cargar una imagen, el `frontend` la envía en base64 al `ai-service`.
 4. El `ai-service` ejecuta MobileNetV2 y cruza el resultado con `danger_db.json` para determinar nivel de peligro.
-5. El `frontend` envía el resultado al `data-service`, que lo persiste en **PostgreSQL**.
+5. El `frontend` envía el resultado al `data-service`, que lo persiste en PostgreSQL.
 6. El historial y las estadísticas son recuperados del `data-service` bajo demanda.
 
 ---
